@@ -1,504 +1,219 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth" data-theme="light">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+"use client";
+import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { Download, Sparkles, Code2, FolderGit2, PhoneCall, User } from "lucide-react";
 
-  <style>
-    /* Custom animations */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    .fadeInUp {
-      animation: fadeInUp 0.8s ease forwards;
-    }
-    .fadeInUpDelay {
-      animation: fadeInUp 0.8s ease forwards;
-      animation-delay: 0.4s;
-    }
+export default function Portfolio() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-    /* Dark mode colors */
-    html[data-theme='dark'] {
-      --bg: #0c0152;
-      --text: #e4e4e4;
-      --primary: #a78bfa;
-      --secondary: #f472b6;
-      --card-bg: #10105b;
-      --border: #444;
-    }
-    body {
-      background-color: var(--bg, #f3f4f6);
-      color: var(--text, #1f2937);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .dark-mode-bg {
-      background-color: var(--card-bg);
-    }
-    .dark-mode-border {
-      border-color: var(--border);
-    }
-    .dark-mode-text-primary {
-      color: var(--primary);
-    }
-    .dark-mode-text-secondary {
-      color: var(--secondary);
-    }
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    /* Microinteraction on cards */
-    .card-hover:hover {
-      transform: translateY(-6px) scale(1.05);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
+    const lines = Array.from({ length: 40 }).map(() => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      length: Math.random() * 50 + 20,
+      speed: Math.random() * 0.5 + 0.2,
+    }));
 
-    /* Bounce slow animation for buttons */
-    @keyframes bounce-slow {
-      0%, 100% {
-        transform: translateY(-5%);
-        animation-timing-function: cubic-bezier(0.8,0,1,1);
-      }
-      50% {
-        transform: translateY(0);
-        animation-timing-function: cubic-bezier(0,0,0.2,1);
-      }
-    }
-    .animate-bounce-slow {
-      animation: bounce-slow 3s infinite;
-    }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      lines.forEach((line) => {
+        ctx.beginPath();
+        ctx.moveTo(line.x, line.y);
+        ctx.lineTo(line.x, line.y + line.length);
+        ctx.strokeStyle = "rgba(0, 255, 128, 0.4)";
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = "rgba(0, 255, 128, 0.5)";
+        ctx.shadowBlur = 6;
+        ctx.stroke();
 
-    /* Scroll reveal hidden */
-    .scroll-reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .scroll-reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-  </style>
-</head>
-<body>
-
-  <!-- Dark Mode Toggle Button -->
-  <button id="darkModeToggle" aria-label="Toggle Dark Mode"
-    class="fixed top-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition z-50 focus:outline-none focus:ring-2 focus:ring-purple-400">
-    🌙
-  </button>
-
-  <!-- ========== Header Section ========== -->
-  <header class="bg-gradient-to-r from-purple-600 via-pink-500 to-red-400 text-white py-24 px-6 text-center">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-5xl md:text-6xl font-extrabold mb-4 fadeInUp">
-        Hi, I'm <span class="text-yellow-300">Sharan Patil</span>
-      </h1>
-
-      <p class="text-xl md:text-2xl font-medium mb-8 fadeInUp delay-200">
-        Aspiring AI/ML Engineer | Web Developer | Innovator
-      </p>
-
-      <a href="#projects"
-        class="inline-block bg-white text-purple-700 font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-yellow-200 hover:text-black transition duration-300 animate-bounce-slow focus:outline-none focus:ring-4 focus:ring-yellow-300">
-        🚀 View My Projects
-      </a>
-    </div>
-  </header>
-
-  <main class="max-w-5xl mx-auto p-6 space-y-20">
-
-    <!-- ========== About Section ========== -->
-    <section id="about" class="bg-gradient-to-br from-white via-indigo-50 to-purple-100 py-20 rounded-lg scroll-reveal">
-      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
-
-        <!-- Profile Image -->
-        <div class="w-40 h-40 md:w-60 md:h-60 rounded-full overflow-hidden shadow-lg border-4 border-purple-300 dark-mode-border">
-          <img src="Myphoto.jpg" alt="Your Photo" class="w-full h-full object-cover" />
-        </div>
-
-        <!-- About Text -->
-        <div class="flex-1 text-center md:text-left">
-          <h2
-            class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-indigo-600 mb-4 dark-mode-text-primary">
-            About Me
-          </h2>
-
-          <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            I'm a passionate <span class="font-semibold text-indigo-700 dark-mode-text-secondary">AI/ML engineer</span>
-            and aspiring web developer, currently pursuing my degree in AIML. I enjoy building intuitive interfaces,
-            solving real-world problems with code, and working on innovative projects.
-          </p>
-
-          <p class="text-md text-gray-600 dark:text-gray-400">
-            Apart from tech, I love organizing events, mentoring peers, and continuously learning new tools to elevate
-            my skill set.
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ========== Skills Section ========== -->
-    <section id="skills" class="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 py-20 rounded-lg scroll-reveal">
-      <div class="max-w-5xl mx-auto px-6 text-center">
-
-        <h2
-          class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-blue-600 mb-8 dark-mode-text-primary">
-          Skills
-        </h2>
-
-        <p class="text-gray-600 mb-10 dark:text-gray-400">
-          Here are some of the technologies and tools I excel at:
-        </p>
-
-        <div
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          <!-- Skill Item -->
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-purple-500 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">HTML5</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-pink-500 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">CSS3 / Tailwind</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-indigo-500 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">JavaScript</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-green-500 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Python</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-yellow-500 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">React</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-blue-400 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Git & GitHub</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-red-400 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">C/C++</h3>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-md p-5 border-t-4 border-cyan-500 card-hover dark-mode-bg dark-mode-border transition duration-300">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Machine Learning</h3>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects Section with filtering -->
-    <section id="projects" class="bg-gray-100 dark:bg-[#181818] py-16 rounded-lg scroll-reveal">
-      <div class="max-w-5xl mx-auto px-6">
-        <h2
-          class="text-4xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8 dark-mode-text-primary">
-          Projects
-        </h2>
-
-        <!-- Filter Buttons -->
-        <div class="flex justify-center space-x-4 mb-12">
-          <button data-filter="all"
-            class="filter-btn bg-purple-600 text-white px-5 py-2 rounded-full shadow hover:bg-purple-700 transition focus:outline-none focus:ring-2 focus:ring-purple-400">
-            All
-          </button>
-          <button data-filter="web"
-            class="filter-btn bg-pink-500 text-white px-5 py-2 rounded-full shadow hover:bg-pink-600 transition focus:outline-none focus:ring-2 focus:ring-pink-400">
-            Web
-          </button>
-          <button data-filter="ml"
-            class="filter-btn bg-green-600 text-white px-5 py-2 rounded-full shadow hover:bg-green-700 transition focus:outline-none focus:ring-2 focus:ring-green-400">
-            Machine Learning
-          </button>
-          <button data-filter="iot"
-            class="filter-btn bg-yellow-600 text-white px-5 py-2 rounded-full shadow hover:bg-yellow-700 transition focus:outline-none focus:ring-2 focus:ring-yellow-400">
-            IoT
-          </button>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-10">
-          <!-- Project 1 -->
-          <div
-            class="project-card bg-white rounded-2xl shadow-md p-6 border-l-4 border-blue-600 card-hover dark-mode-bg dark-mode-border transition duration-300"
-            data-category="iot">
-            <h3
-              class="text-xl font-bold text-gray-900 dark:text-gray-200 mb-2 uppercase tracking-wide">
-              Smart Assistant for Visually Impaired Person
-            </h3>
-            <p class="text-gray-700 dark:text-gray-400 text-sm leading-relaxed">
-              A novel mobile-based vision enhancement system tailored for blind and visually impaired individuals,
-              aiming to improve personal navigation and spatial awareness.
-            </p>
-          </div>
-
-          <!-- Project 2 -->
-          <div
-            class="project-card bg-white rounded-2xl shadow-md p-6 border-l-4 border-green-600 card-hover dark-mode-bg dark-mode-border transition duration-300"
-            data-category="iot">
-            <h3
-              class="text-xl font-bold text-gray-900 dark:text-gray-200 mb-2 tracking-wide">
-              Smart Assignment Dropbox
-            </h3>
-            <p class="text-gray-700 dark:text-gray-400 text-sm leading-relaxed">
-              A Dropbox built for collecting assignments of students using RFID technology and Google Sheets.
-            </p>
-          </div>
-
-          <div
-            class="project-card bg-white rounded-2xl shadow-md p-6 border-l-4 border-yellow-600 card-hover dark-mode-bg dark-mode-border transition duration-300"
-            data-category="web">
-            <h3
-              class="text-xl font-bold text-gray-900 dark:text-gray-200 mb-2">
-              CampusConnect
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm">
-              A centralized platform to manage student clubs, events, and announcements with role-based access for admin and students.
-            </p>
-          </div>
-
-          <div
-            class="project-card bg-white rounded-2xl shadow-md p-6 border-l-4 border-red-600 card-hover dark-mode-bg dark-mode-border transition duration-300"
-            data-category="web ml">
-            <h3
-              class="text-xl font-bold text-gray-900 dark:text-gray-200 mb-2">
-              ScriptureLens
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm">
-              A web app using NLP to summarize and explain spiritual texts from different religions for modern readers.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== Resume Section ========== -->
-    <section id="resume" class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-20 rounded-lg scroll-reveal">
-      <div class="max-w-4xl mx-auto px-6 text-center">
-
-        <h2
-          class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-700 mb-6 dark-mode-text-primary">
-          Resume
-        </h2>
-
-        <p class="text-lg text-gray-700 mb-10 dark:text-gray-300">
-          Download my resume to explore my academic journey, skills, and key accomplishments.
-        </p>
-
-        <a href="My Resume (1).pdf" download
-          class="inline-block bg-purple-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-purple-700 shadow-lg transition focus:outline-none focus:ring-4 focus:ring-purple-400">
-          Download Resume
-        </a>
-      </div>
-    </section>
-
-    <!-- ========== Contact Section ========== -->
-    <section id="contact" class="bg-white dark:bg-[#121212] py-20 rounded-lg scroll-reveal">
-      <div class="max-w-4xl mx-auto px-6">
-
-        <h2
-          class="text-4xl font-extrabold text-center text-gray-800 mb-10 dark:text-gray-200 dark-mode-text-primary">
-          Contact Me
-        </h2>
-
-        <form id="contactForm" class="max-w-xl mx-auto space-y-6" novalidate>
-
-          <div>
-            <label for="name" class="block mb-2 font-medium text-gray-700 dark:text-gray-300">Name</label>
-            <input type="text" id="name" name="name" required
-              class="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-[#222] dark:border-gray-600 dark:text-gray-200" />
-            <p class="mt-1 text-sm text-red-600 hidden" id="nameError">Please enter your name.</p>
-          </div>
-
-          <div>
-            <label for="email" class="block mb-2 font-medium text-gray-700 dark:text-gray-300">Email</label>
-            <input type="email" id="email" name="email" required
-              class="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-[#222] dark:border-gray-600 dark:text-gray-200" />
-            <p class="mt-1 text-sm text-red-600 hidden" id="emailError">Please enter a valid email.</p>
-          </div>
-
-          <div>
-            <label for="message" class="block mb-2 font-medium text-gray-700 dark:text-gray-300">Message</label>
-            <textarea id="message" name="message" rows="4" required
-              class="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-[#222] dark:border-gray-600 dark:text-gray-200"></textarea>
-            <p class="mt-1 text-sm text-red-600 hidden" id="messageError">Please enter a message.</p>
-          </div>
-
-          <button type="submit"
-            class="bg-purple-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition focus:outline-none focus:ring-4 focus:ring-purple-400">
-            Send Message
-          </button>
-
-          <p id="formMessage" class="mt-4 text-center font-semibold"></p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <!-- ========== Footer Section ========== -->
-  <footer class="bg-gradient-to-r from-purple-600 via-pink-500 to-red-400 text-white py-8 mt-20">
-    <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-
-      <p class="mb-4 md:mb-0 text-center md:text-left">&copy; 2025 Sharan Patil. All rights reserved.</p>
-
-      <div class="flex space-x-6 justify-center text-2xl">
-        <a href="https://github.com/StackedSharan/CODSOFT" aria-label="GitHub" target="_blank" rel="noopener noreferrer"
-          class="hover:text-yellow-300 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline" fill="currentColor" viewBox="0 0 24 24" width="28"
-            height="28">
-            <path
-              d="M12 0a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.4.7-4.2-1.6-4.2-1.6a3.3 3.3 0 00-1.4-1.8c-1.1-.7.1-.7.1-.7a2.6 2.6 0 011.9 1.3 2.7 2.7 0 003.7 1 2.7 2.7 0 01.8-1.7c-2.7-.3-5.5-1.3-5.5-5.9a4.6 4.6 0 011.3-3.2 4.3 4.3 0 01.1-3.2s1-.3 3.3 1.3a11.3 11.3 0 016 0c2.3-1.6 3.3-1.3 3.3-1.3a4.3 4.3 0 01.1 3.2 4.6 4.6 0 011.3 3.2c0 4.6-2.8 5.6-5.5 5.9a3 3 0 01.8 2.3v3.3c0 .3.2.7.8.6A12 12 0 0012 0z" />
-          </svg>
-        </a>
-        <a href="https://www.linkedin.com/in/sharantech4001/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"
-          class="hover:text-yellow-300 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline" fill="currentColor" viewBox="0 0 24 24" width="28"
-            height="28">
-            <path
-              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.76 2.239 5 5 5h14c2.761 0 5-2.24 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.967 0-1.75-.784-1.75-1.75 0-.965.783-1.75 1.75-1.75s1.75.785 1.75 1.75c0 .966-.783 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-1.338-.026-3.064-1.867-3.064-1.868 0-2.155 1.46-2.155 2.968v5.7h-3v-11h2.881v1.507h.041c.401-.76 1.381-1.561 2.844-1.561 3.041 0 3.603 2.001 3.603 4.6v6.454z" />
-          </svg>
-        </a>
-        <a href="mailto:sharan.techx@gmail.com" aria-label="Email" target="_blank" rel="noopener noreferrer"
-          class="hover:text-yellow-300 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline" fill="currentColor" viewBox="0 0 24 24" width="28"
-            height="28">
-            <path
-              d="M20 4H4c-1.104 0-2 .896-2 2v12c0 1.104.896 2 2 2h16c1.104 0 2-.896 2-2V6c0-1.104-.896-2-2-2zm0 2v.511l-8 5.486-8-5.486V6h16zm0 12H4V8.167l8 5.487 8-5.487V18z" />
-          </svg>
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Dark mode toggle logic
-    const toggleBtn = document.getElementById('darkModeToggle');
-    const htmlEl = document.documentElement;
-    let isDark = false;
-
-    function updateDarkMode() {
-      if (isDark) {
-        htmlEl.setAttribute('data-theme', 'dark');
-        toggleBtn.textContent = '☀️';
-      } else {
-        htmlEl.setAttribute('data-theme', 'light');
-        toggleBtn.textContent = '🌙';
-      }
-    }
-    toggleBtn.addEventListener('click', () => {
-      isDark = !isDark;
-      updateDarkMode();
-    });
-    updateDarkMode();
-
-    // Scroll reveal on sections
-    const scrollElements = document.querySelectorAll('.scroll-reveal');
-    const revealOnScroll = () => {
-      scrollElements.forEach(el => {
-        const elementTop = el.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
-        if (elementTop < windowHeight - 100) {
-          el.classList.add('visible');
+        line.y += line.speed;
+        if (line.y > canvas.height) {
+          line.y = -line.length;
+          line.x = Math.random() * canvas.width;
         }
       });
-    };
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll();
-
-    // Project filtering logic
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('ring-4', 'ring-purple-400'));
-        btn.classList.add('ring-4', 'ring-purple-400');
-
-        const filter = btn.getAttribute('data-filter');
-        projectCards.forEach(card => {
-          if (filter === 'all' || card.dataset.category.includes(filter)) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-
-    // Initialize with "All" selected
-    filterBtns[0].click();
-
-    // Contact form validation and feedback
-    const contactForm = document.getElementById('contactForm');
-    const nameInput = contactForm.name;
-    const emailInput = contactForm.email;
-    const messageInput = contactForm.message;
-
-    const nameError = document.getElementById('nameError');
-    const emailError = document.getElementById('emailError');
-    const messageError = document.getElementById('messageError');
-    const formMessage = document.getElementById('formMessage');
-
-    function validateEmail(email) {
-      // Simple email regex
-      return /^\S+@\S+\.\S+$/.test(email);
+      requestAnimationFrame(draw);
     }
 
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+    draw();
+  }, []);
 
-      let valid = true;
+  return (
+    <div className="min-h-screen bg-black/90 text-green-200 relative overflow-hidden font-sans scroll-smooth">
+      {/* ✅ Background Canvas */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <canvas ref={canvasRef} className="w-full h-full" />
+      </div>
 
-      if (!nameInput.value.trim()) {
-        nameError.classList.remove('hidden');
-        valid = false;
-      } else {
-        nameError.classList.add('hidden');
-      }
+      {/* ✅ Navbar */}
+      <nav className="fixed top-0 left-0 w-full backdrop-blur-md bg-black/70 z-20 p-4 flex justify-between items-center shadow-sm border-b border-green-500">
+        <span className="text-xl font-bold text-green-300 flex items-center gap-2">
+          <User className="w-5 h-5" /> Sharan Patil
+        </span>
+        <div className="space-x-6 text-sm">
+          <a href="#home" className="hover:text-green-400">Home</a>
+          <a href="#projects" className="hover:text-green-400">Projects</a>
+          <a href="#skills" className="hover:text-green-400">Skills</a>
+          <a href="#contact" className="hover:text-green-400">Contact</a>
+        </div>
+      </nav>
 
-      if (!validateEmail(emailInput.value)) {
-        emailError.classList.remove('hidden');
-        valid = false;
-      } else {
-        emailError.classList.add('hidden');
-      }
+      <main className="pt-32 px-6 max-w-6xl mx-auto space-y-24">
+        {/* ✅ Hero */}
+        <motion.section
+          id="home"
+          className="text-center space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="flex justify-center">
+            <div className="w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden shadow-lg border-4 border-green-300">
+              <Image
+                src="/Myphoto.jpg"
+                alt="Sharan Patil"
+                width={208}
+                height={208}
+                className="object-cover w-full h-full"
+              />
+            </div>
+          </div>
+          <h1 className="text-5xl font-bold text-green-300">Hello, I’m Sharan</h1>
+          <p className="text-lg text-green-400">
+            A passionate AI/ML student building creative tech experiences.
+          </p>
+        </motion.section>
 
-      if (!messageInput.value.trim()) {
-        messageError.classList.remove('hidden');
-        valid = false;
-      } else {
-        messageError.classList.add('hidden');
-      }
+        {/* ✅ Resume Section */}
+        <motion.section
+          className="text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-semibold mb-4 flex justify-center items-center gap-2">
+            <Download className="w-6 h-6" /> Download My Resume
+          </h2>
+          <p className="text-green-400 mb-6 max-w-xl mx-auto">
+            Interested in learning more about my background, experience, and work? Grab a copy of my resume below.
+          </p>
+          <a
+            href="/My Resume.pdf"
+            download
+            className="inline-flex items-center px-6 py-3 bg-green-600 text-black font-semibold rounded-full shadow hover:bg-green-500 transition"
+          >
+            <Download className="w-5 h-5 mr-2" /> Resume PDF
+          </a>
+        </motion.section>
 
-      if (valid) {
-        // Simulate form submission success
-        formMessage.textContent = 'Thanks for reaching out! I will get back to you soon.';
-        formMessage.classList.remove('text-red-600');
-        formMessage.classList.add('text-green-600');
-        contactForm.reset();
-      } else {
-        formMessage.textContent = 'Please fix the errors above and try again.';
-        formMessage.classList.remove('text-green-600');
-        formMessage.classList.add('text-red-600');
-      }
-    });
-  </script>
+        {/* ✅ Projects Section */}
+        <motion.section
+          id="projects"
+          className="text-center px-4"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-semibold mb-8 flex justify-center items-center gap-2">
+            <FolderGit2 className="w-6 h-6" /> Projects
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: "Smart Assistant for Visually Impaired",
+                category: "IoT",
+                description: "A mobile-based vision enhancement system to assist blind and visually impaired individuals.",
+              },
+              {
+                title: "Smart Assignment Dropbox",
+                category: "IoT",
+                description: "An RFID-based dropbox integrated with Google Sheets for student submissions.",
+              },
+              {
+                title: "CampusConnect",
+                category: "Web",
+                description: "A centralized platform for student clubs, events, and role-based admin access.",
+              },
+              {
+                title: "ScriptureLens",
+                category: "Web / ML",
+                description: "A web app using NLP to summarize and explain spiritual texts for modern readers.",
+              },
+            ].map((project, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                className="bg-black border border-green-500 p-6 rounded-2xl shadow-md hover:bg-green-900/10 transition"
+              >
+                <h3 className="text-xl font-bold text-green-300 mb-2">{project.title}</h3>
+                <p className="text-sm text-green-500 italic mb-2">{project.category}</p>
+                <p className="text-sm text-green-300">{project.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
 
-</body>
-</html>
+        {/* ✅ Skills Section */}
+        <motion.section
+          id="skills"
+          className="text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-semibold mb-8 flex justify-center items-center gap-2">
+            <Code2 className="w-6 h-6" /> Skills
+          </h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {["Python", "React", "TensorFlow", "TailwindCSS", "Node.js", "Git"].map((skill) => (
+              <motion.span
+                key={skill}
+                whileHover={{ scale: 1.1 }}
+                className="px-4 py-2 bg-green-800 text-green-100 rounded-full shadow text-sm font-medium border border-green-500"
+              >
+                {skill}
+              </motion.span>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* ✅ Contact Section */}
+        <motion.section
+          id="contact"
+          className="text-center pb-12"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-semibold mb-4 flex justify-center items-center gap-2">
+            <PhoneCall className="w-6 h-6" /> Get in Touch
+          </h2>
+          <p className="text-green-400 mb-6">
+            Let’s connect! Reach out for collaborations, internships or just to say hi.
+          </p>
+          <div className="text-green-300 text-sm leading-relaxed">
+            📧 <a href="mailto:sharan.techx@gmail.com" className="hover:underline">sharan.techx@gmail.com</a><br />
+            💼 <a href="https://linkedin.com/in/sharantech4001" target="_blank" rel="noopener noreferrer" className="hover:underline">linkedin.com/in/sharantech4001</a><br />
+            📱 +91 9482580289
+          </div>
+          <button className="inline-flex items-center px-6 py-3 border border-green-400 rounded-full hover:bg-green-800 transition text-sm mt-4">
+            <Sparkles className="mr-2 h-4 w-4" /> Say Hello
+          </button>
+        </motion.section>
+      </main>
+    </div>
+  );
+}
+
